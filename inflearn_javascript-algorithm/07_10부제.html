@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>출력결과</title>
+  </head>
+  <body>
+    <script>
+      function solution(day, arr) {
+        // 내가 푼 오답
+        // let answer = 0;
+        // let strDay = String(day);
+        // for (let x of arr) {
+        //   if (String(x).includes(strDay[0])) {
+        //     answer += 1;
+        //   }
+        // }
+        // return answer;
+        //1의 자리를 구하려면 10으로 나눈 나머지를 하면 된다.
+
+        let answer = 0;
+        for (let x of arr) {
+          if (x % 10 === day) answer++;
+        }
+        return answer;
+      }
+
+      arr = [25, 23, 11, 47, 35, 17, 33];
+      console.log(solution(3, arr));
+    </script>
+  </body>
+</html>
