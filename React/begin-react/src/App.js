@@ -1,99 +1,81 @@
-import React, { useRef, useState, useMemo, useCallback } from 'react';
+import React, { useMemo, useReducer } from 'react';
 //components
-// import Hello from './components/Hello';
-// import Wrapper from './components/Wrapper';
-// import Counter from './components/Counter';
-// import InputSample from './components/InputSample';
 import UserList from './components/UserList';
 import CreateUser from './components/CreateUser';
+// hooks
+
 //styles
 import './App.css';
+//library
+import produce from 'immer';
 
 function countActiveUsers(users) {
   console.log('활성 사용자를 세는중...');
   return users.filter((user) => user.active).length;
 }
 
-function App() {
-  const [inputs, setInputs] = useState({
+const initialState = {
+  inputs: {
     username: '',
     email: '',
-  });
-  const { username, email } = inputs;
-  const onChange = useCallback(
-    (e) => {
-      const { name, value } = e.target;
-      setInputs({
-        ...inputs,
-        [name]: value,
-      });
-    },
-    [inputs]
-  );
-  const [users, setUsers] = useState([
+  },
+  users: [
     {
       id: 1,
       username: 'jong',
-      email: 'dsafxzcvxzcvwqe@gmail.com',
+      email: 'jongjong@adfasdf.com',
       active: true,
     },
     {
       id: 2,
-      username: 'jong2',
-      email: 'wqewqewqezxczxc@gmail.com',
+      username: 'woo',
+      email: 'wowowowo@adfasdf.com',
       active: false,
     },
     {
       id: 3,
-      username: 'jong3',
-      email: 'asdasdasdsadafc@gmail.com',
+      username: 'hyuk',
+      email: 'hyhyhyhy@adfasdf.com',
       active: false,
     },
-  ]);
-  const nextId = useRef(4);
-  const onCreate = useCallback(() => {
-    const user = {
-      id: nextId.current,
-      username,
-      email,
-    };
-    setUsers(users.concat(user));
+  ],
+};
 
-    setInputs({
-      username: '',
-      email: '',
-    });
-    nextId.current += 1;
-  }, [users, username, email]);
+function reducer(state, action) {
+  switch (action.type) {
+    case 'CREATE_USER':
+      return produce(state, (draft) => {
+        draft.users.push(action.user);
+      });
+    case 'TOGGLE_USER':
+      return produce(state, (draft) => {
+        const user = draft.users.find((user) => user.id === action.id);
+        user.action = !user.active;
+      });
+    case 'REMOVE_USER':
+      return produce(state, (draft) => {
+        const index = draft.users.findIndex((user) => user.id === action.id);
+        draft.users.splice(index, 1);
+      });
+    default:
+      return state;
+  }
+}
+// UserDispatch라는 이름으로 내보냄
+export const UserDispatch = React.createContext(null);
 
-  const onRemove = useCallback(
-    (id) => {
-      setUsers(users.filter((user) => user.id !== id));
-    },
-    [users]
-  );
-  const onToggle = useCallback(
-    (id) => {
-      setUsers(
-        users.map((user) =>
-          user.id === id ? { ...user, active: !user.active } : user
-        )
-      );
-    },
-    [users]
-  );
+function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const { users } = state;
+
   const count = useMemo(() => countActiveUsers(users), [users]);
   return (
-    <>
-      <CreateUser
-        username={username}
-        email={email}
-        onChange={onChange}
-        onCreate={onCreate}
-      />
-      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
-      <div>활성 사용자 수: {count}</div>
-    </>
+    <UserDispatch.Provider value={dispatch}>
+      <CreateUser />
+      <UserList users={users} />
+      <div>활성사용자 수 : {count}</div>
+    </UserDispatch.Provider>
   );
 }
 
