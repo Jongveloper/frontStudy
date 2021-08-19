@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>출력결과</title>
+  </head>
+  <body>
+    <script>
+      function solution(s) {
+        // 대문자 : 65 ~ 90 대문자에서 32 더하면 소문자.
+        // 소문자 : 97 ~ 122 소문자에서 32 빼면 대문자
+        let answer = '';
+        let num = 0;
+        for (x of s) {
+          // if (x.charCodeAt() < 91) {
+          //   num = x.charCodeAt() + 32;
+          //   answer += String.fromCharCode(num);
+          // } else if (x.charCodeAt() >= 97) {
+          //   num = x.charCodeAt() - 32;
+          //   answer += String.fromCharCode(num);
+          // }
+          if (x === x.toUpperCase()) answer += x.toLowerCase();
+          else answer += x.toUpperCase();
+        }
+        return answer;
+      }
+
+      console.log(solution('StuDY'));
+    </script>
+  </body>
+</html>

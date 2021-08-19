@@ -1,0 +1,28 @@
+12
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>출력결과</title>
+  </head>
+  <body>
+    <script>
+      function solution(s) {
+        // 대문자 : 65 ~ 90 대문자에서 32 더하면 소문자.
+        // 소문자 : 97 ~ 122 소문자에서 32 빼면 대문자
+        // let answer = s.toUpperCase();
+        let answer = '';
+        for (x of s) {
+          // if (x === x.toLowerCase()) answer += x.toUpperCase();
+          // else answer += x;
+          let num = x.charCodeAt();
+          if (num >= 97 && num <= 122) answer += String.fromCharCode(num - 32);
+          else answer += x;
+        }
+        return answer;
+      }
+
+      let str = 'ItisTimeToStudy';
+      console.log(solution(str));
+    </script>
+  </body>
+</html>
