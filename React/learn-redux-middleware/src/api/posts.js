@@ -14,7 +14,7 @@ const posts = [
     body: 'redux-thunk를 사용해서 비동기 작업을 처리해봅시다',
   },
   {
-    id: 1,
+    id: 3,
     title: 'redux-saga도 사용해보아요!',
     body: '나중엔 redux-saga를 사용해서 비동기 작업을 처리하는 방법도 배워볼 거에요!',
   },
