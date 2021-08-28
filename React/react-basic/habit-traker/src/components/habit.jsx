@@ -1,6 +1,13 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-class Habit extends Component {
+class Habit extends PureComponent {
+  componentDidMount() {
+    console.log(`habit: ${this.props.habit.name} mounted`);
+  }
+
+  componentWillUnmount() {
+    console.log(`habit: ${this.props.habit.name} will unmount unmounted`);
+  }
   handleIncrement = () => {
     this.props.onIncrement(this.props.habit);
   };
@@ -27,7 +34,7 @@ class Habit extends Component {
           className="habit-button habit-decrease"
           onClick={this.handleDecrement}
         >
-          <i class="fas fa-minus-square"></i>
+          <i className="fas fa-minus-square"></i>
         </button>
         <button
           className="habit-button habit-delete"
