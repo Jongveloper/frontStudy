@@ -1,0 +1,29 @@
+header {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+  font-size: 20px;
+}
+.headerText {
+  margin: auto 10px;
+  font-weight: 700;
+}
+
+.searchWrap {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: black;
+  padding: 0% 0.5%;
+}
+.search {
+  width: 100%;
+}
+.searchLogo {
+  cursor: pointer;
+  flex: 1;
+  background-color: lightslategray;
+}
