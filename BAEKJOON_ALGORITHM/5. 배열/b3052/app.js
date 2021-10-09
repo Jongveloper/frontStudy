@@ -6,14 +6,14 @@ let input = fs
   .split('\n')
   .map((item) => +item);
 
-const userNum = [];
+const numArray = [];
 
 input.forEach((x) => {
   const num = x % 42;
 
-  if (userNum.indexOf(num) === -1) {
-    userNum.push(num);
+  if (numArray.indexOf(num) === -1) {
+    numArray.push(num);
   }
 });
 
-console.log(userNum.length);
+console.log(numArray.length);
