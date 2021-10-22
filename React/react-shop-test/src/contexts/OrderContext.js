@@ -44,7 +44,7 @@ export function OrderContextProvider(props) {
       const newOrderCounts = { ...orderCounts };
 
       const orderCountsMap = orderCounts[orderType];
-      orderCountsMap.set(itemName, parseInt(newOrderCounts));
+      orderCountsMap.set(itemName, parseInt(newItemCount));
 
       setOrderCounts(newOrderCounts);
     }
