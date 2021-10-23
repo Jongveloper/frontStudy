@@ -3,7 +3,8 @@ import axios from 'axios';
 import Products from './Products';
 import ErrorBanner from '../../components/ErrorBanner';
 import Options from './Options';
-import OrderContext from '../../contexts/OrderContext';
+import { OrderContext } from '../../contexts/OrderContext';
+
 function Type({ orderType }) {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(false);
