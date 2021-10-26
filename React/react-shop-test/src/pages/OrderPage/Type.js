@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import Products from './Products';
-import ErrorBanner from '../../components/ErrorBanner';
 import Options from './Options';
+import ErrorBanner from '../../components/ErrorBanner';
 import { OrderContext } from '../../contexts/OrderContext';
 
 function Type({ orderType }) {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(false);
   const [orderDatas, updateItemCount] = useContext(OrderContext);
+
   useEffect(() => {
     loadItems(orderType);
   }, [orderType]);
@@ -41,7 +42,7 @@ function Type({ orderType }) {
 
   let orderTypeKorean = orderType === 'products' ? '상품' : '옵션';
   return (
-    <React.Fragment>
+    <>
       <h2>주문 종류</h2>
       <p>하나의 가격</p>
       <p>
@@ -55,7 +56,7 @@ function Type({ orderType }) {
       >
         {optionItems}
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
