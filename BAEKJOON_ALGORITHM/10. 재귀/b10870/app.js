@@ -8,4 +8,4 @@ function f(n) {
   else return f(n - 1) + f(n - 2);
 }
 
-console.log(f(input));
+console.log(f(+input));
