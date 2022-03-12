@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, Text, View } from 'react-native'
 
-function Setting() {
+function Settings() {
   const [count, setCount] = useState(1);
   return (
     <View>
@@ -12,4 +12,4 @@ function Setting() {
   )
 }
 
-export default Setting;
+export default Settings;
