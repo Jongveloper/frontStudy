@@ -13,5 +13,4 @@ function solution(s) {
   answer = stack.join('');
   return answer;
 }
-
 console.log(solution(input));
