@@ -61,8 +61,8 @@ function EachOrder({ item }: { item: Order }) {
           ).toFixed(1)}
           km
         </Text>
-        <Text>왕십리</Text>
-        <Text>면목동</Text>
+        <Text style={styles.eachInfo}>왕십리</Text>
+        <Text style={styles.info}>면목동</Text>
       </Pressable>
       {detail ?
         <View>
