@@ -151,3 +151,21 @@ callViewCall.sayNameCall();
  * woody 찍힘
  * woody 찍힘
  */
+
+function a() {}
+
+/**
+ * bind
+ * const b = a.bind(window) => a를 호출하는 것이아닌 a함수의 this만 바꿔 새로운 함수를 만드는 것
+ * 즉, bind는 this만 바꾼 새로운 함수를 만들어 줌
+ * 만약 함수를 호출하려면 b()라고 함수를 호출해야함
+ *
+ * apply
+ * a.apply(window) === a.bind(window)() === a.call(window)
+ *
+ * call과 apply의 차이점
+ * 함수 호출하는 법이 틀림
+ * function add(a, b) { return a + b }
+ * add.apply(null, [3,5]) => 배열로 넣어줌
+ * add.call(null, 3, 5) => 하나씩 넣어줌
+ */
