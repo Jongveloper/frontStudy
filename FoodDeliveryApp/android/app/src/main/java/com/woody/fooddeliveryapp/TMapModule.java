@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class TMapModule extends ReactContextBaseJavaModule {
     TMapModule(ReactApplicationContext context) {
         super(context);
-        // 모듈 로딩 시 실행되는 부분
+        // 모듈 로딩 시 실행되는  부분
         TMapTapi tMapTapi = new TMapTapi(context);
         tMapTapi.setSKTMapAuthentication("l7xx1dc841ad3ed0465387c52234636bce51"); // 여기에 여러분의 키 넣을 것
     }
