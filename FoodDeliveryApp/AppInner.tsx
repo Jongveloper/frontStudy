@@ -19,6 +19,7 @@ import Config from "react-native-config";
 import userSlice from "./src/slices/user";
 import { Alert } from "react-native";
 import usePermissions from "./src/hooks/usePermissions";
+import SplashScreen from "react-native-splash-screen";
 
 export type LoggedInParamList = {
   Orders: undefined;
@@ -87,6 +88,7 @@ function AppInner() {
       try {
         const token = await EncryptedStorage.getItem('refreshToken');
         if (!token) {
+          SplashScreen.hide();
           return;
         }
         const response = await axios.post(
@@ -112,6 +114,7 @@ function AppInner() {
         }
       } finally {
         // TODO: 스플래시 스크린 없애기
+        SplashScreen.hide();
       }
     };
     getTokenAndRefresh();
