@@ -137,7 +137,11 @@ function AppInner() {
       <Tab.Screen
         name="Settings"
         component={Settings}
-        options={{ title: '내 정보', tabBarIcon: () => <FontAwesomeIcon name="gear" size={20} /> }}
+        options={{
+          title: '내 정보',
+          unmountOnBlur: true,
+          tabBarIcon: () => <FontAwesomeIcon name="gear" size={20} />
+        }}
       />
     </Tab.Navigator>
   ) : (

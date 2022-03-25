@@ -1,17 +1,28 @@
 import React, { useCallback, useEffect } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import axios, { AxiosError } from 'axios';
 import Config from 'react-native-config';
+import orderSlice, { Order } from '../slices/order';
 import { useAppDispatch } from '../store';
 import userSlice from '../slices/user';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/reducer';
 import EncryptedStorage from 'react-native-encrypted-storage';
+import FastImage from 'react-native-fast-image';
 
 function Settings() {
+  const accessToken = useSelector((state: RootState) => state.user.accessToken);
+  const completes = useSelector((state: RootState) => state.order.completes);
   const money = useSelector((state: RootState) => state.user.money);
   const name = useSelector((state: RootState) => state.user.name);
-  const accessToken = useSelector((state: RootState) => state.user.accessToken);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -25,7 +36,21 @@ function Settings() {
       dispatch(userSlice.actions.setMoney(response.data.data));
     }
     getMoney();
-  }, [accessToken, dispatch])
+  }, [accessToken, dispatch]);
+
+  useEffect(() => {
+    async function getCompletes() {
+      const response = await axios.get<{ data: number }>(
+        `${Config.API_URL}/completes`,
+        {
+          headers: { authorization: `Bearer ${accessToken}` },
+        },
+      );
+      console.log('completes', response.data);
+      dispatch(orderSlice.actions.setCompletes(response.data.data));
+    }
+    getCompletes();
+  }, [dispatch, accessToken]);
 
   const onLogout = useCallback(async () => {
     try {
@@ -34,7 +59,7 @@ function Settings() {
         {},
         {
           headers: {
-            authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         },
       );
@@ -53,6 +78,20 @@ function Settings() {
     }
   }, [accessToken, dispatch]);
 
+  const renderItem = useCallback(({ item }: { item: Order }) => {
+    return (
+      <FastImage
+        source={{ uri: `${Config.API_URL}/${item.image}` }}
+        resizeMode="contain"
+        style={{
+          height: Dimensions.get('window').width / 3 - 10,
+          width: Dimensions.get('window').width / 3 - 10,
+          margin: 5,
+        }}
+      />
+    );
+  }, []);
+
   return (
     <View>
       <View style={styles.money}>
@@ -63,6 +102,14 @@ function Settings() {
           </Text>
           원
         </Text>
+      </View>
+      <View>
+        <FlatList
+          data={completes}
+          numColumns={3}
+          keyExtractor={o => o.orderId}
+          renderItem={renderItem}
+        />
       </View>
       <View style={styles.buttonZone}>
         <Pressable
@@ -80,10 +127,10 @@ function Settings() {
 
 const styles = StyleSheet.create({
   money: {
-    padding: 20
+    padding: 20,
   },
   moneyText: {
-    fontSize: 16
+    fontSize: 16,
   },
   buttonZone: {
     alignItems: 'center',
