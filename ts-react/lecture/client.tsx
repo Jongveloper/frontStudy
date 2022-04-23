@@ -1,6 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from "react-redux";
 
-import TicTacToe from './TicTacToe';
+import store from './store';
+import App from './App';
 
-ReactDOM.render(<TicTacToe />, document.querySelector('#root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+  , document.querySelector('#root'));
