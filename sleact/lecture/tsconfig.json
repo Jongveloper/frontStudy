@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["react/next", "react-dom/next"],
     "esModuleInterop": true,
     "sourceMap": true,
     "lib": ["ES2020", "DOM"],

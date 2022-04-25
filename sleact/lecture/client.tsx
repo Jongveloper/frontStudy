@@ -1,6 +1,14 @@
 import React from "react";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
-import { render } from "react-dom";
 import App from '@layouts/App';
 
-render(<Router><App /></Router>, document.querySelector('#app'));
+const rootElement = document.querySelector('#app');
+if (!rootElement) throw new Error('Failed to find the root element');
+const root = ReactDOM.createRoot(rootElement);
+
+root.render(
+  <Router>
+    <App />
+  </Router>
+);

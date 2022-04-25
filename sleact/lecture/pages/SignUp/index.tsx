@@ -6,11 +6,22 @@ const SignUp = () => {
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-  const onChangeEmail = useCallback(() => { }, []);
-  const onChangeNickname = useCallback(() => { }, []);
-  const onChangePassword = useCallback(() => { }, []);
-  const onChangePasswordCheck = useCallback(() => { }, []);
-  const onSubmit = useCallback(() => { }, []);
+  const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }, []);
+  const onChangeNickname = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickname(e.target.value)
+  }, []);
+  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+  }, []);
+  const onChangePasswordCheck = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordCheck(e.target.value)
+  }, []);
+  const onSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(email, nickname, password, passwordCheck);
+  }, [email, nickname, password, passwordCheck]);
 
   return (
     <div id="container">
