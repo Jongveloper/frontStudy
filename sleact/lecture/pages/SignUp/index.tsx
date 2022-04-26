@@ -3,8 +3,12 @@ import React, { useCallback, useState } from "react";
 import axios from 'axios';
 import { Form, Header, Label, Input, Button, LinkContainer, Error, Success } from "./styles";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
+import fetcher from "@utils/fetcher";
+import { Navigate } from "react-router";
 
 const SignUp = () => {
+  const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, setPassword] = useState('');
@@ -49,6 +53,16 @@ const SignUp = () => {
         .finally(() => { });
     }
   }, [email, nickname, password, passwordCheck, mismatchError]);
+
+
+  if (data === undefined) {
+    return <div>로딩중..</div>
+  }
+
+  if (data) {
+    return <Navigate replace to='/workspace/channel' />
+  }
+
 
   return (
     <div id="container">
