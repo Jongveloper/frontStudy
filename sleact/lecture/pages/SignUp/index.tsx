@@ -1,22 +1,14 @@
+import useInput from "@hooks/useInput";
 import React, { useCallback, useState } from "react";
 import { Form, Header, Label, Input, Button, LinkContainer, Error } from "./styles";
 
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState('');
+  const [email, onChangeEmail] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [mismatchError, setMisMatchError] = useState(false);
   // useCallback을 안감싸면 매번 리렌더링되기 때문에 디버깅이 힘듦
-
-  const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  }, []);
-
-  const onChangeNickname = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  }, []);
-
   // 함수 내부의 변수는 deps에 넣지 않지만 함수 외부의 변수를 사용할 땐 deps에 추가해줘야함
   // setPassword와 setMissMatchError를 넣지 않는 이유는 공식문서에서 이미 고정된 값이라고 말해주기 때문이다.
   const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
