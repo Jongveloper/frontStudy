@@ -37,7 +37,7 @@ const SignUp = () => {
         email,
         nickname,
         password
-      })
+      }, { withCredentials: true })
         .then((response) => {
           console.log(response)
           setSignUpSuccess(true);

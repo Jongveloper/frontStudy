@@ -4,9 +4,12 @@ import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { Navigate } from "react-router";
 import { Link } from "react-router-dom";
+import useSWR from "swr";
+import fetcher from "@utils/fetcher";
 
 
 const LogIn = () => {
+  const { data, error } = useSWR('http://localhost:3095/api/users', fetcher);
   const [logInError, setLogInError] = useState(false);
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
