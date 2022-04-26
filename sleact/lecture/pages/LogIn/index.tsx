@@ -7,12 +7,12 @@ import { Link } from "react-router-dom";
 import useSWR from "swr";
 import fetcher from "@utils/fetcher";
 
-
+//mutate = 서버에 요청을 안보내고 데이터를 수정
 const LogIn = () => {
   const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher,
     // {
     //   dedupingInterval: 100000,
-    //   요청 다시 보낼 시간
+    //   캐시의 유지 기간
     // }
   );
   const [logInError, setLogInError] = useState(false);
@@ -21,6 +21,7 @@ const LogIn = () => {
   const onSubmit = useCallback(
     (e: React.ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
+      // pending
       setLogInError(false);
       axios
         .post(
@@ -30,10 +31,12 @@ const LogIn = () => {
             withCredentials: true,
           },
         )
-        .then(() => {
-          mutate();
+        .then((response) => {
+          // fulfilled
+          mutate(response.data, false);
         })
         .catch((error) => {
+          // rejected
           setLogInError(error.response?.data?.code === 401);
         });
     },
