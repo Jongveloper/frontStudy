@@ -1,10 +1,13 @@
 import fetcher from "@utils/fetcher";
 import axios from "axios";
 import React, { FC, useCallback } from 'react';
-import { Navigate } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import useSWR from "swr";
 import { Channels, Chats, Header, MenuScroll, ProfileImg, RightMenu, WorkspaceName, Workspaces, WorkspaceWrapper } from "./styles";
 import gravatar from 'gravatar';
+import loadable from '@loadable/component';
+const Channel = loadable(() => import('@pages/Channel'));
+const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 // const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
 const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
@@ -39,9 +42,13 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
           <WorkspaceName>Sleact</WorkspaceName>
           <MenuScroll>menu scroll</MenuScroll>
         </Channels>
-        <Chats>Chats</Chats>
+        <Chats>
+          <Routes>
+            <Route path='/channel' element={<Channel />} />
+            <Route path='/dm' element={<DirectMessage />} />
+          </Routes>
+        </Chats>
       </WorkspaceWrapper>
-      {children}
     </div>
   )
 }
