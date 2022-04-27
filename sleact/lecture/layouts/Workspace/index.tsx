@@ -27,6 +27,13 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     setShowUserMenu((prev) => !prev)
   }, [])
 
+
+  const MenuStyle = {
+    right: 0,
+    top: 38
+  }
+
+
   // return은 항상 hooks보다 아래에 있어야한다.
   if (!data) {
     return <Navigate replace to='/login' />
@@ -38,7 +45,7 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
           <span onClick={onClickUserProfile}>
             <ProfileImg src={gravatar.url(data.nickname, { s: '28px', d: 'retro' })} alt={data.email} />
             {showUserMenu &&
-              <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
+              <Menu style={MenuStyle} show={showUserMenu} onCloseModal={onClickUserProfile}>
                 <ProfileModal>
                   <img src={gravatar.url(data.nickname, { s: '28px', d: 'retro' })} alt={data.nickname} />
                   <div>
