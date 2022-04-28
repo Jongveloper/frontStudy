@@ -1,10 +1,10 @@
 import fetcher from "@utils/fetcher";
 import axios from "axios";
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useState, VFC } from 'react';
 import { Navigate, Route, Routes } from "react-router";
 import useSWR from "swr";
 import { Button, Input, Label } from "@pages/SignUp/styles";
-import { AddButton, Channels, Chats, Header, LogOutButton, MenuScroll, ProfileImg, ProfileModal, RightMenu, WorkspaceButton, WorkspaceName, Workspaces, WorkspaceWrapper } from "./styles";
+import { AddButton, Channels, Chats, Header, LogOutButton, MenuScroll, ProfileImg, ProfileModal, RightMenu, WorkspaceButton, WorkspaceModal, WorkspaceName, Workspaces, WorkspaceWrapper } from "./styles";
 import gravatar from 'gravatar';
 import loadable from '@loadable/component';
 import Menu from "@components/Menu";
@@ -13,14 +13,17 @@ import { IUser } from "@typings/db";
 import useInput from "@hooks/useInput";
 import Modal from "@components/Modal";
 import { toast } from "react-toastify";
+import CreateChannelModal from "@components/CreateChannelModal";
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 // const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
-const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
+const Workspace = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
   const { data: userData, error, mutate } = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
@@ -67,12 +70,26 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
+    setShowCreateChannelModal(false);
+  }, [])
+
+  const toggleWorkspaceModal = useCallback(() => {
+    setShowWorkspaceModal((prev) => !prev);
+  }, [])
+
+  const onClickAddChannel = useCallback(() => {
+    setShowCreateChannelModal(true);
   }, [])
 
 
   const MenuStyle = {
     right: 0,
     top: 38
+  }
+
+  const WorkspaceModalStyle = {
+    top: 95,
+    left: 80
   }
 
 
@@ -112,8 +129,17 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
           <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
         </Workspaces>
         <Channels>
-          <WorkspaceName>Sleact</WorkspaceName>
-          <MenuScroll>menu scroll</MenuScroll>
+          <WorkspaceName onClick={toggleWorkspaceModal}>Sleact</WorkspaceName>
+          <MenuScroll>
+            <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={WorkspaceModalStyle}>
+              <WorkspaceModal>
+                <h2>Sleact</h2>
+                {/* <button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button> */}
+                <button onClick={onClickAddChannel}>채널 만들기</button>
+                <button onClick={onLogout}>로그아웃</button>
+              </WorkspaceModal>
+            </Menu>
+          </MenuScroll>
         </Channels>
         <Chats>
           <Routes>
@@ -135,6 +161,11 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
           <Button type='submit'>생성하기</Button>
         </form>
       </Modal>
+      <CreateChannelModal
+        show={showCreateChannelModal}
+        onCloseModal={onCloseModal}
+        setShowCreateChannelModal={setShowCreateChannelModal}
+      />
     </div>
   )
 }
