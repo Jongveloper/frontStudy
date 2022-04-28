@@ -1,7 +1,7 @@
 import fetcher from "@utils/fetcher";
 import axios from "axios";
 import React, { FC, useCallback, useState, VFC } from 'react';
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useParams } from "react-router";
 import useSWR from "swr";
 import { Button, Input, Label } from "@pages/SignUp/styles";
 import { AddButton, Channels, Chats, Header, LogOutButton, MenuScroll, ProfileImg, ProfileModal, RightMenu, WorkspaceButton, WorkspaceModal, WorkspaceName, Workspaces, WorkspaceWrapper } from "./styles";
@@ -9,7 +9,7 @@ import gravatar from 'gravatar';
 import loadable from '@loadable/component';
 import Menu from "@components/Menu";
 import { Link } from "react-router-dom";
-import { IUser } from "@typings/db";
+import { IChannel, IUser } from "@typings/db";
 import useInput from "@hooks/useInput";
 import Modal from "@components/Modal";
 import { toast } from "react-toastify";
@@ -26,7 +26,9 @@ const Workspace = () => {
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
 
+  const { workspace } = useParams<{ workspace: string }>();
   const { data: userData, error, mutate } = useSWR<IUser | false>('http://localhost:3095/api/users', fetcher);
+  const { data: channelData } = useSWR<IChannel[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null, fetcher)
 
   const onLogout = useCallback(() => {
     axios.post('http://localhost:3095/api/users/logout', null, {
@@ -139,12 +141,13 @@ const Workspace = () => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
+            {channelData?.map((v) => (<div>{v.name}</div>))}
           </MenuScroll>
         </Channels>
         <Chats>
           <Routes>
-            <Route path='/channel' element={<Channel />} />
-            <Route path='/dm' element={<DirectMessage />} />
+            <Route path='/channel/:channel' element={<Channel />} />
+            <Route path='/dm/:id' element={<DirectMessage />} />
           </Routes>
         </Chats>
       </WorkspaceWrapper>
