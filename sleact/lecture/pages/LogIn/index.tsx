@@ -9,7 +9,7 @@ import fetcher from "@utils/fetcher";
 
 //mutate = 서버에 요청을 안보내고 데이터를 수정
 const LogIn = () => {
-  const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher,
+  const { data, error, mutate } = useSWR('/api/users', fetcher,
     // {
     //   dedupingInterval: 100000,
     //   캐시의 유지 기간
