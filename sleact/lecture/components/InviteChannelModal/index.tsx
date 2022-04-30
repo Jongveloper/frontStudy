@@ -15,14 +15,13 @@ interface Props {
   setShowInviteChannelModal: (flag: boolean) => void;
 }
 const InviteChannelModal: FC<Props> = ({ show, onCloseModal, setShowInviteChannelModal }) => {
-  const { workspace, channel } = useParams<{ workspace: string; channel: string }>();
+  const { workspace, channel } = useParams<{ workspace: string; channel: string; }>();
   const [newMember, onChangeNewMember, setNewMember] = useInput('');
   const { data: userData } = useSWR<IUser>('/api/users', fetcher);
   const { mutate: revalidateMembers } = useSWR<IUser[]>(
     userData ? `/api/workspaces/${workspace}/channels/${channel}/members` : null,
     fetcher,
   );
-
   const onInviteMember = useCallback(
     (e: React.ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();

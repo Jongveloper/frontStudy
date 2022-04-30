@@ -40,8 +40,17 @@ const Workspace = () => {
   const [socket, disconnect] = useSocket(workspace);
 
   useEffect(() => {
-    socket.on('message')
-  }, [])
+    if (channelData && userData && socket) {
+      socket.emit('login', { id: userData.id, channels: channelData.map((v) => v.id) })
+    }
+  }, [channelData, userData, socket]);
+
+  //workspace가 바뀔 때 연결을 해제해줘야하므로 deps안에 workspace를 넣어준다.
+  useEffect(() => {
+    return () => {
+      disconnect();
+    }
+  }, [workspace, disconnect])
 
   const onLogout = useCallback(() => {
     axios.post('/api/users/logout', null, {
@@ -167,7 +176,7 @@ const Workspace = () => {
         <Chats>
           <Routes>
             <Route path='/channel/:channel' element={<Channel />} />
-            <Route path='/dm/:id' element={<DirectMessage />} />
+            {/* <Route path='/channel/:dm' element={<DirectMessage />} /> */}
           </Routes>
         </Chats>
       </WorkspaceWrapper>
@@ -194,11 +203,13 @@ const Workspace = () => {
         onCloseModal={onCloseModal}
         setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
       />
-      <InviteChannelModal
-        show={showInviteChannelModal}
-        onCloseModal={onCloseModal}
-        setShowInviteChannelModal={setShowInviteChannelModal}
-      />
+      <Routes>
+        <Route path='/channel/:channel' element={< InviteChannelModal
+          show={showInviteChannelModal}
+          onCloseModal={onCloseModal}
+          setShowInviteChannelModal={setShowInviteChannelModal}
+        />} />
+      </Routes>
     </div>
   )
 }
