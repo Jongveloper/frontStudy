@@ -17,7 +17,7 @@ const DMList = () => {
     userData ? `/api/workspaces/${workspace}/members` : null,
     fetcher,
   );
-  const [socket] = useSocket();
+  const [socket] = useSocket(workspace);
   const [channelCollapse, setChannelCollapse] = useState(false);
   const [onlineList, setOnlineList] = useState<number[]>([]);
 
@@ -41,7 +41,6 @@ const DMList = () => {
       socket?.off('onlineList')
     }
   }, [socket])
-
 
   return (
     <>

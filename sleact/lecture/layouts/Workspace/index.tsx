@@ -41,6 +41,7 @@ const Workspace = () => {
 
   useEffect(() => {
     if (channelData && userData && socket) {
+      console.log(socket)
       socket.emit('login', { id: userData.id, channels: channelData.map((v) => v.id) })
     }
   }, [channelData, userData, socket]);
@@ -176,7 +177,7 @@ const Workspace = () => {
         <Chats>
           <Routes>
             <Route path='/channel/:channel' element={<Channel />} />
-            {/* <Route path='/channel/:dm' element={<DirectMessage />} /> */}
+            <Route path='/channel/:dm' element={<DirectMessage />} />
           </Routes>
         </Chats>
       </WorkspaceWrapper>
