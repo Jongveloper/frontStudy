@@ -28,7 +28,6 @@ const EachDM: FC<Props> = ({ member, isOnline }) => {
   }, [mutate, location.pathname, workspace, member]);
 
 
-  console.log(isOnline)
   return (
     <NavLink key={member.id} style={({ isActive }) => ({ color: isActive ? 'green' : 'white' })} to={`/workspace/${workspace}/dm/${member.id}`}>
       <i
