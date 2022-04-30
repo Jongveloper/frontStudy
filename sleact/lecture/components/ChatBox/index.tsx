@@ -4,7 +4,9 @@ import autosize from 'autosize';
 import gravatar from 'gravatar';
 import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { Mention, SuggestionDataItem } from 'react-mentions';
-
+import { useParams } from 'react-router';
+import useSWR from "swr";
+import fetcher from '../../utils/fetcher';
 interface Props {
   onSubmitForm: (e: any) => void;
   chat?: string;
@@ -14,6 +16,9 @@ interface Props {
 }
 const ChatBox: FC<Props> = ({ onSubmitForm, chat, onChangeChat, placeholder, data }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { workspace } = useParams<{ workspace: string }>();
+  const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
+  const { data: memberData } = useSWR<IUser[]>(userData ? `/api/workspaces/${workspace}/members` : null, fetcher)
   useEffect(() => {
     if (textareaRef.current) {
       autosize(textareaRef.current);
@@ -37,20 +42,20 @@ const ChatBox: FC<Props> = ({ onSubmitForm, chat, onChangeChat, placeholder, dat
     search: string,
     highlightedDisplay: React.ReactNode,
     index: number,
-    focused: boolean,
+    focus: boolean,
   ) => React.ReactNode = useCallback(
     (member, search, highlightedDisplay, index, focus) => {
-      if (!data) {
+      if (!memberData) {
         return null;
       }
       return (
         <EachMention focus={focus}>
-          <img src={gravatar.url(data[index].email, { s: '20px', d: 'retro' })} alt={data[index].nickname} />
+          <img src={gravatar.url(memberData[index].email, { s: '20px', d: 'retro' })} alt={memberData[index].nickname} />
           <span>{highlightedDisplay}</span>
         </EachMention>
       );
     },
-    [data],
+    [memberData],
   );
 
   return (
@@ -68,7 +73,7 @@ const ChatBox: FC<Props> = ({ onSubmitForm, chat, onChangeChat, placeholder, dat
           <Mention
             appendSpaceOnAdd
             trigger="@"
-            data={data?.map((v) => ({ id: v.id, display: v.nickname })) || []}
+            data={memberData?.map((v) => ({ id: v.id, display: v.nickname })) || []}
             renderSuggestion={renderUserSuggestion}
           />
         </MentionsTextarea>
