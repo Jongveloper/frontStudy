@@ -1,6 +1,6 @@
 import fetcher from "@utils/fetcher";
 import axios from "axios";
-import React, { FC, useCallback, useState, VFC } from 'react';
+import React, { FC, useCallback, useState, useEffect } from 'react';
 import { Navigate, Route, Routes, useParams } from "react-router";
 import useSWR from "swr";
 import { Button, Input, Label } from "@pages/SignUp/styles";
@@ -18,6 +18,7 @@ import InviteWorkspaceModal from "@components/InviteWorkspaceModal";
 import InviteChannelModal from "@components/InviteChannelModal";
 import DMList from "@components/DMList";
 import ChannelList from "@components/ChannelList";
+import useSocket from "@hooks/useSocket";
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
@@ -36,6 +37,11 @@ const Workspace = () => {
   const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher);
   const { data: channelData } = useSWR<IChannel[]>(userData ? `/api/workspaces/${workspace}/channels` : null, fetcher)
   const { data: memberData } = useSWR<IChannel[]>(userData ? `/api/workspaces/${workspace}/members` : null, fetcher)
+  const [socket, disconnect] = useSocket(workspace);
+
+  useEffect(() => {
+    socket.on('message')
+  }, [])
 
   const onLogout = useCallback(() => {
     axios.post('/api/users/logout', null, {
