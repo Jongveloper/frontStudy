@@ -1,23 +1,34 @@
+import Chat from '@components/Chat';
 import { ChatZone, Section, StickyHeader } from '@components/ChatList/styles';
-import { IDM } from "@typings/db";
-import React, { FC, useCallback, useRef } from 'react';
-import Chat from '@components/Chat'
+import { IDM, IChat } from '@typings/db';
+import React, { useCallback, forwardRef, RefObject, MutableRefObject } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 interface Props {
-  chatSections: { [key: string]: IDM[] };
+  chatSections: { [key: string]: (IDM)[] };
+  setSize: (f: (size: number) => number) => Promise<(IDM)[][] | undefined>;
+  isReachingEnd: boolean;
 }
+const ChatList = forwardRef<Scrollbars, Props>(({ chatSections, setSize, isReachingEnd }, scrollRef) => {
+  const onScroll = useCallback(
+    (values: any) => {
+      if (values.scrollTop === 0 && !isReachingEnd) {
+        console.log('가장 위');
+        setSize((prevSize) => prevSize + 1).then(() => {
+          // 스크롤 위치 유지
+          const current = (scrollRef as MutableRefObject<Scrollbars>)?.current;
+          if (current) {
+            current.scrollTop(current.getScrollHeight() - values.scrollHeight);
+          }
+        });
+      }
+    },
+    [scrollRef, isReachingEnd, setSize],
+  );
 
-const ChatList: FC<Props> = ({ chatSections }) => {
-  const scrollbarRef = useRef(null);
-  const onScroll = useCallback(() => {
-
-  }, [])
-
-  // Object.entries => 객체를 배열로 바꿈
   return (
     <ChatZone>
-      <Scrollbars ref={scrollbarRef} onScrollFrame={onScroll}>
+      <Scrollbars autoHide ref={scrollRef} onScrollFrame={onScroll}>
         {Object.entries(chatSections).map(([date, chats]) => {
           return (
             <Section className={`section-${date}`} key={date}>
@@ -28,11 +39,11 @@ const ChatList: FC<Props> = ({ chatSections }) => {
                 <Chat key={chat.id} data={chat} />
               ))}
             </Section>
-          )
+          );
         })}
       </Scrollbars>
     </ChatZone>
   );
-};
+});
 
 export default ChatList;
