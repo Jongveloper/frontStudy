@@ -46,6 +46,7 @@ const BoxContainer = styled.div`
     height: 100px;
     border: 2px solid black;
     background: rgba(255, 255, 0, 0.7);
+    transition: 1s cubic-bezier(0.25, 0.1, 0.49, 1.73); // 애니메이션
     :hover{
       /** width와 height를 쓰면 기존 컨텐츠를 밀어냄 */
       /* transform: scale(2) rotate(45deg); //크기 조절 1은 100퍼센트 크기 2는 두배 */
@@ -53,8 +54,9 @@ const BoxContainer = styled.div`
       /* transform: translate(30px, 10px); // 첫 번째 인자 x축 두 번째 인자 y축 */
       /* transform: translateX(30px); */
       /* transform: translateY(30px); */
+      /* transform-origin: 30% 60%; // 기준 */
       transform: scale(2);
-      transform-origin: 30% 60%; // 기준
+      background: red;
     }
   }
 `;
