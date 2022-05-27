@@ -56,7 +56,8 @@ const CardSide = styled.div`
   height:100%;
   border-radius: 0.5em; // font-size 기준
   font-size: 1.5rem; // 최상위 요소 기준
-  backface-visibility: hidden; // 쓸데없이 보이는 뒷면을 가려주는 용도
+  -webkit-backface-visibility: hidden; // safari 대응
+  backface-visibility: hidden; // 쓸데없이 보이는 뒷면을 가려주는 용도 맨 마지막에 표준 속성을 작성하는 것이 좋다.
 `;
 
 const CardSideFront = styled(CardSide)`
