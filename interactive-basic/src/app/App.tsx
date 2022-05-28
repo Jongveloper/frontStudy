@@ -4,6 +4,7 @@ import { Navigate } from 'react-router'
 import Transform from '../pages/Transform/index';
 import Animation from "../pages/Animation";
 import ThreeD from "../pages/ThreeD";
+import Flex from "../pages/Flex";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/basic' element={<Transform />} />
         <Route path='/animation' element={<Animation />} />
         <Route path='/three' element={<ThreeD />} />
+        <Route path='/flex' element={<Flex />} />
       </Routes>
     </Router>
   );
