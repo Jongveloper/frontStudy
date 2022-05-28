@@ -5,6 +5,7 @@ import Transform from '../pages/Transform/index';
 import Animation from "../pages/Animation";
 import ThreeD from "../pages/ThreeD";
 import Flex from "../pages/Flex";
+import Event from "../pages/Event";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/animation' element={<Animation />} />
         <Route path='/three' element={<ThreeD />} />
         <Route path='/flex' element={<Flex />} />
+        <Route path='/event' element={<Event />} />
       </Routes>
     </Router>
   );
