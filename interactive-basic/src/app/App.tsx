@@ -8,6 +8,7 @@ import Flex from "../pages/Flex";
 import Event from "../pages/Event";
 import Event2 from "../pages/Event2";
 import Event3 from "../pages/Event3";
+import ThreeDoor from "../pages/ThreeDoor";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/basic' element={<Transform />} />
         <Route path='/animation' element={<Animation />} />
         <Route path='/three' element={<ThreeD />} />
+        <Route path='/threedoor' element={<ThreeDoor />} />
         <Route path='/flex' element={<Flex />} />
         <Route path='/event' element={<Event />} />
         <Route path='/event2' element={<Event2 />} />
