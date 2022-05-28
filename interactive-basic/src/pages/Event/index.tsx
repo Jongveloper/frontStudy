@@ -11,14 +11,14 @@ export default function Event() {
 
   return (
     <Wrapper>
-      <Characters>
+      <Characters toggle={toggle} onClick={toggleHandler} ref={ilbuniRef}>
         <A>
           <img src='/images/ilbuni_0.png' alt='일분이' />
         </A>
         <B>
           <img src='/images/ilbuni_1.png' alt='일분이' />
         </B>
-        <C toggle={toggle} onClick={toggleHandler} ref={ilbuniRef}>
+        <C>
           <img src='/images/ilbuni_2.png' alt='일분이' />
         </C>
         <D>
@@ -28,7 +28,7 @@ export default function Event() {
     </Wrapper>
   );
 }
-const special = 'border: 10px dashed red;'
+
 
 const Wrapper = styled.div`
   height: 100%;
@@ -39,11 +39,18 @@ const Wrapper = styled.div`
   display: block;
 `;
 
-const Characters = styled.div`
+const Characters = styled.div <{ toggle: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-around;
   background: #fff000;
+  ${(props) => {
+    if (props.toggle) {
+      return `
+        border: 10px dashed red;
+      `
+    }
+  }}
 
   & > div {
     display: inline-block;
@@ -65,15 +72,8 @@ const A = styled(Ilbuni)`
 `;
 const B = styled(Ilbuni)`
 `;
-const C = styled(Ilbuni) <{ toggle: boolean }>`
-  ${(props) => {
-    if (props.toggle) {
-      return `
-        ${special}
-      `
-    }
-  }}
-  
+const C = styled(Ilbuni)`
+
 `;
 
 const D = styled(Ilbuni)`
