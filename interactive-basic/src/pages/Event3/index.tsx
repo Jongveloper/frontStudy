@@ -1,30 +1,18 @@
 import React, { useRef, useCallback } from "react";
 import styled, { keyframes } from "styled-components";
 
-export default function Event2() {
+export default function Event3() {
   const IlbunRef = useRef<any>([]);
   const clickHandler = useCallback((e: any) => {
-    for (let i = 0; i < IlbunRef.current.length; i++) {
-      if (IlbunRef.current[i] === e.target) {
-        IlbunRef.current[i].remove()
-      }
-    }
+    if (IlbunRef.current === e.target) return
+    IlbunRef.current.removeChild(e.target)
   }, [])
   return (
     <>
-      <Stage>
-        <IlbuniA
-          onClick={clickHandler}
-          ref={el => (IlbunRef.current[0] = el)}
-        />
-        <IlbuniB
-          onClick={clickHandler}
-          ref={el => (IlbunRef.current[1] = el)}
-        />
-        <IlbuniC
-          onClick={clickHandler}
-          ref={el => (IlbunRef.current[2] = el)}
-        />
+      <Stage onClick={clickHandler} ref={IlbunRef}>
+        <IlbuniA />
+        <IlbuniB />
+        <IlbuniC />
       </Stage>
     </>
   )
