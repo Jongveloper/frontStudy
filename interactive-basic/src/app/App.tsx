@@ -9,6 +9,7 @@ import Event from "../pages/Event";
 import Event2 from "../pages/Event2";
 import Event3 from "../pages/Event3";
 import ThreeDoor from "../pages/ThreeDoor";
+import Object from "../pages/Object";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='/event' element={<Event />} />
         <Route path='/event2' element={<Event2 />} />
         <Route path='/event3' element={<Event3 />} />
+        <Route path='/object' element={<Object />} />
       </Routes>
     </Router>
   );
