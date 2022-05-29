@@ -5,18 +5,21 @@ export default function ThreeDoor() {
   return (
     <Stage>
       <Door>
-        <DoorBack></DoorBack>
-        <Character></Character>
+        <DoorBack>
+          <Character />
+        </DoorBack>
         <DoorBody></DoorBody>
       </Door>
       <Door>
-        <DoorBack></DoorBack>
-        <Character></Character>
+        <DoorBack>
+          <Character />
+        </DoorBack>
         <DoorBody></DoorBody>
       </Door>
       <Door>
-        <DoorBack></DoorBack>
-        <Character></Character>
+        <DoorBack>
+          <Character />
+        </DoorBack>
         <DoorBody></DoorBody>
       </Door>
     </Stage>
@@ -33,6 +36,8 @@ const Character = styled.div`
   background-repeat: no-repeat;
   background-position: 50% 100%;
   background-size: contain;
+  transform: translate3d(100%, 0 ,0 ); // 하드웨어 가속을 이용함
+  transition: 0.5s 0.5s; // duration, delay
   /* outline: 2px dashed red; */
 `;
 
@@ -42,6 +47,8 @@ const DoorBody = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
+  transition: 0.5s;
+  transform-origin: 0%; // 축
 `;
 
 const Door = styled.div`
@@ -79,6 +86,10 @@ const Door = styled.div`
       background: rgba(0,0,255,0.7)
     }
   }
+  :hover{
+    ${DoorBody}{transform: perspective(800px) rotateY(-120deg);} // 회전체 자체에 3d를 주면 일정하게 변경됨
+    ${Character}{transform: translate3d(0, 0, 0)}
+  }
  `;
 
 const DoorBack = styled.div`
@@ -88,6 +99,7 @@ const DoorBack = styled.div`
   width: 100%;
   height: 100%;
   background: black;
+  overflow: hidden;
 `;
 
 
@@ -99,6 +111,7 @@ const Stage = styled.div`
   width: 100vw;
   height: 100vh;
   background: #333;
+  /* perspective: 800px; // 3d */
 `;
 
 
