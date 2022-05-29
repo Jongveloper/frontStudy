@@ -5,42 +5,53 @@ export default function ThreeDoor() {
   const stageRef = useRef<any>([]);
   const [currentItem, setCurrentItem] = useState({ classList: { remove: (className: string) => { } } }) //현재 활성화된 아이템을 저장
 
+  // 활성화
+  const activateDoor = useCallback((elem: any) => {
+    elem.classList.add('feDrzD')
+    setCurrentItem(elem);
+  }, [setCurrentItem])
+
+  // 비활성화
+  const inactiveDoor = useCallback((elem: any) => {
+    elem.classList.remove('feDrzD');
+  }, [])
+
+  // 핸들링
   const doorHandler = useCallback((e: any) => {
     const targetElem = e.target;
-
-    if (currentItem) {
-      currentItem.classList.remove('feDrzD');
-    }
-
     if (targetElem.classList.contains('sc-cxabCf')) {
-      targetElem.parentNode.classList.add('feDrzD');
-      // currentItem = targetElem.parentNode;
-      setCurrentItem(targetElem.parentNode)
+      activateDoor(targetElem.parentNode)
     }
-  }, [currentItem, setCurrentItem])
+    if (currentItem) {
+      inactiveDoor(currentItem);
+    }
+  }, [activateDoor, currentItem, inactiveDoor])
+
 
   return (
-    <Stage ref={stageRef} onClick={doorHandler}>
-      <Door >
-        <DoorBack>
-          <Character />
-        </DoorBack>
-        <DoorBody></DoorBody>
-      </Door>
-      <Door >
-        <DoorBack>
-          <Character />
-        </DoorBack>
-        <DoorBody></DoorBody>
-      </Door>
-      <Door >
-        <DoorBack>
-          <Character />
-        </DoorBack>
-        <DoorBody></DoorBody>
-      </Door>
-      <DoorOpened ></DoorOpened>
-    </Stage>
+    <>
+      <Stage ref={stageRef} onClick={doorHandler}>
+        <Door >
+          <DoorBack>
+            <Character />
+          </DoorBack>
+          <DoorBody></DoorBody>
+        </Door>
+        <Door >
+          <DoorBack>
+            <Character />
+          </DoorBack>
+          <DoorBody></DoorBody>
+        </Door>
+        <Door >
+          <DoorBack>
+            <Character />
+          </DoorBack>
+          <DoorBody></DoorBody>
+        </Door>
+      </Stage>
+      <DoorOpened />
+    </>
   )
 }
 
