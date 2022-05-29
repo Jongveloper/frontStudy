@@ -1,16 +1,23 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useState } from "react";
 import styled from "styled-components";
 
 export default function ThreeDoor() {
-  // const [open, setOpen] = useState(false)
   const stageRef = useRef<any>([]);
+  const [currentItem, setCurrentItem] = useState({ classList: { remove: (className: string) => { } } }) //현재 활성화된 아이템을 저장
 
   const doorHandler = useCallback((e: any) => {
     const targetElem = e.target;
-    if (targetElem.classList.contains('sc-cxabCf')) {
-      targetElem.parentNode.classList.add('feDrzD')
+
+    if (currentItem) {
+      currentItem.classList.remove('feDrzD');
     }
-  }, [])
+
+    if (targetElem.classList.contains('sc-cxabCf')) {
+      targetElem.parentNode.classList.add('feDrzD');
+      // currentItem = targetElem.parentNode;
+      setCurrentItem(targetElem.parentNode)
+    }
+  }, [currentItem, setCurrentItem])
 
   return (
     <Stage ref={stageRef} onClick={doorHandler}>
