@@ -1,27 +1,38 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import styled from "styled-components";
 
 export default function ThreeDoor() {
+  // const [open, setOpen] = useState(false)
+  const stageRef = useRef<any>([]);
+
+  const doorHandler = useCallback((e: any) => {
+    const targetElem = e.target;
+    if (targetElem.classList.contains('sc-cxabCf')) {
+      targetElem.parentNode.classList.add('feDrzD')
+    }
+  }, [])
+
   return (
-    <Stage>
-      <Door>
+    <Stage ref={stageRef} onClick={doorHandler}>
+      <Door >
         <DoorBack>
           <Character />
         </DoorBack>
         <DoorBody></DoorBody>
       </Door>
-      <Door>
+      <Door >
         <DoorBack>
           <Character />
         </DoorBack>
         <DoorBody></DoorBody>
       </Door>
-      <Door>
+      <Door >
         <DoorBack>
           <Character />
         </DoorBack>
         <DoorBody></DoorBody>
       </Door>
+      <DoorOpened ></DoorOpened>
     </Stage>
   )
 }
@@ -86,11 +97,16 @@ const Door = styled.div`
       background: rgba(0,0,255,0.7)
     }
   }
-  :hover{
-    ${DoorBody}{transform: perspective(800px) rotateY(-120deg);} // 회전체 자체에 3d를 주면 일정하게 변경됨
-    ${Character}{transform: translate3d(0, 0, 0)}
-  }
+  /* :hover{
+    
+  } */
  `;
+
+const DoorOpened = styled(Door)`
+  ${DoorBody}{transform: perspective(800px) rotateY(-120deg);} // 회전체 자체에 3d를 주면 일정하게 변경됨
+  ${Character}{transform: translate3d(0, 0, 0)}
+ `;
+
 
 const DoorBack = styled.div`
   position: absolute;
