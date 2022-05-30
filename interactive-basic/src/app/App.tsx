@@ -10,6 +10,7 @@ import Event2 from "../pages/Event2";
 import Event3 from "../pages/Event3";
 import ThreeDoor from "../pages/ThreeDoor";
 import Object from "../pages/Object";
+import Transition from "../pages/Transition";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate replace to='/basic' />} />
         <Route path='/basic' element={<Transform />} />
+        <Route path='/transition' element={<Transition />} />
         <Route path='/animation' element={<Animation />} />
         <Route path='/three' element={<ThreeD />} />
         <Route path='/threedoor' element={<ThreeDoor />} />
