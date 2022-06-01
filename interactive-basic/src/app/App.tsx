@@ -12,6 +12,7 @@ import ThreeDoor from "../pages/ThreeDoor";
 import Object from "../pages/Object";
 import Transition from "../pages/Transition";
 import Animation2 from "../pages/Animation2";
+import Project from "../pages/Project";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path='/event2' element={<Event2 />} />
         <Route path='/event3' element={<Event3 />} />
         <Route path='/object' element={<Object />} />
+        <Route path='/project' element={<Project />} />
       </Routes>
     </Router>
   );
