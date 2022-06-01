@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const Project = () => {
+  const HouseRef = useRef<HTMLDivElement>(null)
+  let maxScrollValue = document.body.offsetHeight - window.innerHeight;
+  useEffect(() => {
+    window.addEventListener('scroll', function () {
+      const zMove = this.scrollY / maxScrollValue * 980 - 490;
+      HouseRef.current!.style.transform = 'translateZ(' + zMove + 'vw)';
+    })
+  }, [maxScrollValue]);
   return (
     <>
       {/* <ProgressBarCon>
@@ -13,7 +21,7 @@ const Project = () => {
       </SelectCharacter> */}
       <World>
         <Stage>
-          <House>
+          <House ref={HouseRef}>
             <WallLeft></WallLeft>
             <WallRight></WallRight>
             <WallFrontA>
@@ -107,28 +115,34 @@ const Wall = styled.section`
 const WallLeft = styled(Wall)`
   left: -500vw;
   width: 1000vw;
+  background: #f8f8f8;
   transform: rotateY(90deg) translateZ(100vw);
 `;
 
 const WallRight = styled(Wall)`
   left: -500vw;
   width: 1000vw;
+  background: #f8f8f8;
   transform: rotateY(90deg);
 `;
 const WallFront = styled(Wall)`
 `;
 
 const WallFrontA = styled(WallFront)`
+  transform: translateZ(300vw);
   
 `;
 
 const WallFrontB = styled(WallFront)`
+  transform: translateZ(50vw);
 `;
 
 const WallFrontC = styled(WallFront)`
+  transform: translateZ(-200vw);
 `;
 
 const WallFrontD = styled(WallFront)`
+  transform: translateZ(-500vw);
 `;
 
 const WallContent = styled.div`
