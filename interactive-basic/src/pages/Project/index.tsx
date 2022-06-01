@@ -28,12 +28,12 @@ const Project = () => {
             </WallFrontB>
             <WallFrontC>
               <WallContent>
-                <WallTitle>こんにちは</WallTitle>
+                <WallTitle>Hola</WallTitle>
               </WallContent>
             </WallFrontC>
             <WallFrontD>
               <WallContent>
-                <WallTitle>Hola</WallTitle>
+                <WallTitle>こんにちは</WallTitle>
               </WallContent>
             </WallFrontD>
           </House>
@@ -44,6 +44,8 @@ const Project = () => {
 };
 
 export default Project;
+
+
 
 
 const ProgressBarCon = styled.div`
@@ -69,22 +71,49 @@ const CharacterTwo = styled(SelectCharacterButton)`
 `
 
 const World = styled.div`
-
+  position: fixed;
+  left:0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  perspective: 1000px;
 `;
 
 const Stage = styled.div`
+  position: absolute;
+  left:0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  transform-style: preserve-3d;
 `;
 
 const House = styled.div`
+  width: 100vw;
+  height: 100vh;
+  transform: translateZ(-490vw);
+  transform-style: preserve-3d;
 `;
 
 const Wall = styled.section`
+  position: absolute;
+  left:0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
 `;
 
 const WallLeft = styled(Wall)`
+  left: -500vw;
+  width: 1000vw;
+  transform: rotateY(90deg) translateZ(100vw);
 `;
 
 const WallRight = styled(Wall)`
+  left: -500vw;
+  width: 1000vw;
+  transform: rotateY(90deg);
 `;
 const WallFront = styled(Wall)`
 `;
@@ -103,7 +132,12 @@ const WallFrontD = styled(WallFront)`
 `;
 
 const WallContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 `;
 
 const WallTitle = styled.h2`
+  font-size: 5rem;
 `;
