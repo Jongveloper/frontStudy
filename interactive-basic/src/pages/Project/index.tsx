@@ -1,26 +1,47 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const Project = () => {
-  const HouseRef = useRef<HTMLDivElement>(null)
-  let maxScrollValue = document.body.offsetHeight - window.innerHeight;
+  const HouseRef = useRef<HTMLDivElement>(null);
+  const BarRef = useRef<HTMLDivElement>(null);
+  const StageRef = useRef<HTMLDivElement>(null);
+  let maxScrollValue = 0;
+
+  const resizeHandler = useCallback(() => {
+    maxScrollValue = document.body.offsetHeight - window.innerHeight;
+  }, [maxScrollValue])
+
   useEffect(() => {
+    const mousePos = { x: 0, y: 0 }
     window.addEventListener('scroll', function () {
-      const zMove = this.scrollY / maxScrollValue * 980 - 490;
+      const scrollPer = this.scrollY / maxScrollValue
+      const zMove = scrollPer * 980 - 490;
       HouseRef.current!.style.transform = 'translateZ(' + zMove + 'vw)';
+
+      // progressBar
+      BarRef.current!.style.width = scrollPer * 100 + '%';
     })
-  }, [maxScrollValue]);
+    window.addEventListener('resize', resizeHandler)
+
+    window.addEventListener('mousemove', function (e) {
+      // 가운데가 원점이되게
+      mousePos.x = -1 + (e.clientX / this.window.innerWidth) * 2;
+      mousePos.y = 1 - (e.clientX / this.window.innerHeight) * 2;
+      StageRef.current!.style.transform = 'rotateX(' + (mousePos.y * 5) + 'deg) rotateY(' + (mousePos.x * 5) + 'deg)';
+    })
+    resizeHandler();
+  }, [maxScrollValue, resizeHandler]);
   return (
     <>
-      {/* <ProgressBarCon>
-        <div></div>
+      <ProgressBarCon>
+        <div ref={BarRef}></div>
       </ProgressBarCon>
-      <SelectCharacter>
+      {/* <SelectCharacter>
         <CharacterOne></CharacterOne>
         <CharacterTwo></CharacterTwo>
       </SelectCharacter> */}
       <World>
-        <Stage>
+        <Stage ref={StageRef}>
           <House ref={HouseRef}>
             <WallLeft></WallLeft>
             <WallRight></WallRight>
@@ -57,8 +78,17 @@ export default Project;
 
 
 const ProgressBarCon = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 5px;
+  background: #555;
+  z-index: 100;
   & > div{
-
+    width: 0;
+    height: 100%;
+    background: #00a8ff;
   }
 `;
 
