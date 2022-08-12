@@ -2,7 +2,12 @@
 const numbers = [2, 2];
 
 function solution(arr) {
-  return arr.reduce((a,b) => a + b);
+  return arr.reduce((acc, cur) => {
+    return a + b;
+  }, 0);
+
+  fold
+  reduce
 }
 
 
