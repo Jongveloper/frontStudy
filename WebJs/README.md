@@ -80,3 +80,29 @@ stayContained();
 ```
 이제 value는 블록이 의미하는 대로 범위가 지정된다. 그 밖의 함수 영역에는 존재하지 않는다.
 필요한 만큼만 존재하며 명백한 의도가 실제 효과와 일치한다.
+
+### 반복된 선언은 에러다
+```js
+function redundantRepetition() {
+  var x = 'apple';
+  console.log(x);
+  // 생략
+  var x = 'bravo';
+  // 생략
+  return x;
+}
+```
+위 코드는 문법상 완벽하게 맞다. x를 두 번 이상 선언한다는 사실은 자바스크립트 엔진에서 완전히 무시된다.
+함수 전체에서 사용되는 단일 x 변수를 생성한다. 이전 블록의 var와 마찬가지로 코드의 명백한 의도와 실제 효과는 서로 상충된다.
+let과 const는 동일한 범위에서 반복 선언을 하면 오류가 발생한다.
+```js
+function redundantRepetition() {
+  let x = 'apple';
+  console.log(x);
+  ...
+  let x = 'bravo'; // SyntaxError: Identifier 'x' has already been declared
+  console.log(x);
+  return x;
+}
+```
+사전 예방적 오류로 알려주기 때문에 함수를 호출할 때까지 기다리지 않고 코드가 구문 분석될 때 오류가 발생한다.
