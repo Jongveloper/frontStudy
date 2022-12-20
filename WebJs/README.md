@@ -25,3 +25,58 @@
 - 심볼: 보장된 고윳값
 - BigInt: 임의의 정밀도 정수
 - 그리고 그 외의 많은 기능들
+### 블록 스코프 선언: let과 const
+var와 마찬가지로 let은 변수를 선언한다.
+```js
+let x = 2;
+x += 40;
+console.log(num); // 42
+```
+var를 사용할 수 있는 모든 곳에서 let을 사용할 수 있다. var와 마찬가지로 let은 초기화할 필요가 없다. 이때 변숫값은 기본적으로 undefined로 설정된다.
+```js
+let a;
+console.log(a); // undefined
+```
+위의 내용을 제외하면 var와 let은 매우 다르게 동작한다.
+
+---
+const는 상수를 선언한다.
+```js
+const value = Math.random();
+console.log(value < 0.5 ? '윗면': '아랫면'); 
+```
+상수는 값이 변경될 수 없다는 점을 제외하면 변수와 같다.
+따라서 **초기화**를 해야한다.
+상수에는 기본값이 없다. 변수 대신 상수를 만들고 초기화가 필요하다는 점 외에 const는 let과 같다.
+### 진짜 블록 스코프
+var는 블록에서 튀어나온다. var로 블록 내에서 변수를 선언하면 해당 블록 내부뿐만 아니라 외부에서도 변수를 사용할 수 있다.
+```js
+function jumpOut() {
+  var a = [1, 2, 3];
+  for(var i = 0; i < a.length; ++i) {
+    var value = a[i];
+    console.log(value);
+  }
+  console.log('Outside loop' + value);
+}
+jumOut();
+```
+jumOut의 작성자는 아마도 루프 외부에서 값에 접근할 수 있도록 의도하지는 않았겠지만 접근할 수 있다. 왜 이것이 문제일까?
+- 변수는 유지 관리를 위해 가능한 한 좁게 범위를 지정해야 한다.
+필요한 만큼만 존재해야 하며 그 이후 더 이상 없어야 한다.
+- 코드의 명백한 의도와 실제 효과가 다를 때마다 버그와 유지 관리 문제를 일으킨다.
+
+let과 const는 선언된 **블록 내**에서만 존재한다.
+```js
+function stayContained() {
+  var a = [1, 2, 3];
+  for (var i = 0; i < a.length; ++i) {
+    let value = a[i];
+    console.log(value);
+  }
+  console.log('Outside loop' + value); // ReferenceError: 'value' is not defined
+}
+stayContained();
+```
+이제 value는 블록이 의미하는 대로 범위가 지정된다. 그 밖의 함수 영역에는 존재하지 않는다.
+필요한 만큼만 존재하며 명백한 의도가 실제 효과와 일치한다.
