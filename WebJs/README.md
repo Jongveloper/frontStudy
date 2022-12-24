@@ -106,3 +106,62 @@ function redundantRepetition() {
 }
 ```
 사전 예방적 오류로 알려주기 때문에 함수를 호출할 때까지 기다리지 않고 코드가 구문 분석될 때 오류가 발생한다.
+
+### 호이스팅과 일시적 데드존
+var 선언은 호이스팅된다.
+var를 사용하면 변수를 선언하기 전에 사용할 수 있다.
+```js
+function example() {
+  console.log(answer);
+  answer = 42;
+  console.log(answer);
+  var answer = 67;
+}
+
+example();
+/**
+* undefined
+* 42 
+**/
+```
+변수가 선언되기 전에 사용했지만 var 선언이 함수의 맨 위로 이동한 것처럼 동작한다.
+그리고 선언만 이동하고 그것에 연결된 초기화는 아니다.
+이는 example 함수를 실행할 때 자바스크립트 엔진이 단계별 코드 실행을 시작하기 전에 var선언을 처리하고 필요한 변수를 생성하는 함수를 스캔하기 때문에 발생한다.
+함수의 맨 위에 선언을 호이스트한다. 그렇게 할 때 undefined 기본값으로 선언한 변수를 초기화 한다. 그러나 코드의 명백한 의도와 실제 효과는 동기화되지 않았으므로 여기에 버그가 있음을 의미할 수 있다.
+let과 const를 사용하면 코드의 단계별 실행에서 선언이 처리될 때까지 변수를 사용할 수 없다.
+```js
+function boringOldLinearTime() {
+  answer = 42; // ReferenceError: 'answer' is not defined
+  console.log(answer);
+  let answer;
+}
+boringOldLinearTime();
+```
+겉보기에는 let 선언은 var 선언처럼 함수의 맨 위로 올라가지 않는다.
+하지만 이것은 흔히 하는 **오해**다.
+let과 const도 호이스팅된다. 단지 **다르게** 호이스팅될 뿐이다.
+코드가 포함 범위의 answer에 할당하려고 시도했을 수 있다는 사실을 고려하자.
+```js
+let answer; // 외부 'answer'
+function hoisting() {
+  answer = 42; // ReferenceError: 'answer' is not defined
+  console.log(answer);
+  let answer; // 내부 'answer'
+}
+hoisting();
+```
+마지막에 내부의 let answer까지 answer가 존재하지 않는다면, 함수의 시작 부분에서 answer = 42; 라인이 외부 answer에 할당되어야하지 않는가?
+let과 const는 임시 데드존(Temporal Dead Zone, TMZ)이라는 개념을 사용한다. 코드 실행 내에서 식별자를 전혀 사용할 수 없는 기간인 TDZ는 포함된 범위의 엔트리를 참조하는 데도 사용되지 않는다. var와 마찬가지로 자바스크립트 엔진은 코드의 단계별 실행을 시작하기 전에 let과 const 선언에 대한 코드를 살펴보고 처리한다.
+```js
+let answer; // 외부 answer
+function notInitializedYet(){
+  // 여기에 answer를 예약해 둔다.
+  answer = 42; // ReferenceError: 'answer' is not defined
+  console.log(answer);
+  let answer; // 내부 answer
+}
+notInitializedYet();
+```
+TDZ는 코드 실행이 선언이 나타나는 범위에 들어갈 때 시작되고 선언이 실행될 때까지 계속된다(초기화가 붙어 있는 상태로). 이 예에서 answer는 notIntializedYet(TDZ가 시작되는 곳)의 시작 부분에 예약되고 선언이 있는 곳(TDZ가 끝나는 곳)에서 초기화된다. 따라서 let과 const는 역시 호이스트되고 var와는 다르게 호이스트된다.
+
+TDZ는 공간적(위치 관련)이 아니라 시간적(시간 관련)이라는 점을 이해하는 것이 중요하다. 식별자를 사용할 수 없는 범위의 맨 위에 있는 영역이 아니다. 식별자를 사용할 수 없는 기간이다.
