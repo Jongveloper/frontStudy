@@ -216,3 +216,13 @@ const array = [42 ,67 ,3 , 23 , 14];
 const filtereed = array.filter(entry => entry < 30);
 console.log(filtered); // [3, 23, 14]
 ```
+### 기본값 매개변수
+```js
+function animate(type='fadeout', duration) {
+  console.log(type + ", " + duration);
+}
+animate('fadeout', 300); // "fadeout, 300"
+animate('undefined', 300); // "fadeout, 300"
+animate('fadein', 300); // "fadein, 300"
+animate(); // "fadeout, undefined"
+```
