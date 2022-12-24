@@ -199,3 +199,20 @@ obj 상수는 객체를 직접 포함하지 않고 객체에 대한 참조를 �
 따라서 객체의 상태를 변경할 때 obj 상수의 값은 변경하지 않는다.
 여전히 동일한 객체에 대한 참조이다. 상태가 업데이트 되어 value 속성에 대해 다른 값을 저장만 하면 된다.
 const가 하는 일은 다른 객체를 참조하거나 null 또는 완전히 다른 것으로 설정하는 것처럼 obj의 실제 값을 변경하지 못하도록 하는 것이다.
+
+# 새로운 함수 기능
+### 화살표 함수 문법
+값이 30 미만인 엔트리만 유지하도록 배열을 필터링하는 함수를 만들어보자
+```js
+var array = [42 ,67 ,3 , 23 , 14];
+var filtered = array.filter(function(entry) {
+  return entry < 30;
+});
+console.log(filtered); // [3, 23, 14]
+```
+위의 코드를 화살표 함수로 변경해보자
+```js
+const array = [42 ,67 ,3 , 23 , 14];
+const filtereed = array.filter(entry => entry < 30);
+console.log(filtered); // [3, 23, 14]
+```
