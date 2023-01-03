@@ -226,3 +226,35 @@ animate('undefined', 300); // "fadeout, 300"
 animate('fadein', 300); // "fadein, 300"
 animate(); // "fadeout, undefined"
 ```
+
+### 간결한 형태의 화살표 함수
+**값이 30 미만인 엔트리만 유지하도록 배열을 필터링**
+- ES5
+```js
+var array = [42, 67, 3, 23, 14];
+var filtered = array.filter(function(entry) {
+  return entry 30;
+});
+```
+- 화살표 함수
+```js
+const array = [42, 67, 3, 23, 14];
+const filtered = array.filter(entry => entry < 30);
+```
+화살표 함수의 간결한 형태는 말 그대로 받아들이는 매개변수의 이름일 뿐이다.
+화살표는 파서에게 이것이 화살표 함수임을 알리고, 표현식은 반환하는 값을 정의할 뿐이다.
+function 키워드, 함수 본문을 정의하는 중괄호, return 키워드는 없다.
+매개변수, 화살표, 본문 표현식만 있다.
+화살표 함수가 여러 매개변수를 받아들이도록 하려면 매개변수 목록을 괄호로 묶어 모두가 화살표 함수의 매개변수임을 명확히 해야 한다.
+화살표 뒤에 중괄호를 사용하여 함수 본문을 제공하여 함수 본문 양식을 사용할 수 있다.
+```js
+const array = [42, 67, 3, 23, 14];
+array.sort((a,b) => {
+  const aIsOdd = a % 2;
+  const bIsOdd = b % 2;
+  if(aIsOdd) {
+    return bIssOdd ? a - b : 1;
+  }
+  return bIsOdd? 1 : a - b;
+})
+```
