@@ -293,3 +293,49 @@ array.sort((a,b) => {
 자바스크립트 엔진은 기존 함수를 생성자로 사용할지 여부를 미리 알 수 없기 때문에 생성하는 모든 기존 함수에 참조할 프로토타입 속성과 객체를 넣어야 한다.
 그런데 화살표 함수는 생성자가 될 수 없으므로 prototype 속성을 받지 않는다.
 화살표 함수는 객체가 첨부된 프로토타입 속성을 가질 필요가 없기 때문에 화살표 함수는 기존 함수보다 가벼워질 수 있다.
+
+# 기본값과 매개변수
+```js
+/*
+* 명령형 프로그래밍
+*/
+function animate(type, duration) {
+  if (duration === undefined) {
+    duration = 300;
+  }
+  // 작업 수행
+}
+```
+```js
+/*
+* 선언적 프로그래밍
+*/
+function animate(type, duration = 300) {
+  // 작업 수행
+}
+```
+위 코드를 사용법이 더 간결하고 쉬워졌다.
+함수가 호출될 때 매개변수의 값이 undefined면 기본값이 사용된다.
+
+### 기본값은 함수의 인자 수에 포함되지 않는다.
+함수의 **인자 수**는 일반적으로 함수가 가지고 있는 공식 선언 매개변수의 수로 정의되며, 함수의 length속성에서 가져올 수 있다.
+```js
+function none() {}
+console.log(none.length); // 0
+
+function one(a) {}
+console.log(one.length); // 1
+
+function two(a, b) {}
+console.log(two.length); // 2
+```
+자바스크립트에서 기본값이 있는 매개변수는 인자 수를 계산할 때 계산되지 않으며 실제로 후속 매개변수도 계산되지 않는다.
+```js
+function stillOne(a, b = 42) {}
+console.log(stillOne.length); // 1
+
+function oneYetAgain(a, b = 42, c) {}
+console.log(oneYetAgain.length); // 1
+```
+stillOne 함수의 결과는 간단하다. 기본값이 없는 하나의 매개변수와 기본값이 있는 매개변수가 있으므로 그 인자 수는 1이다.
+oneYetAgain 함수의 결과는 c 매개변수에 명시적인 기본값이 없지만 앞에 있는 매개변수에 기본 값이 있기 때문에 인자수에 포함되지 않는다.
