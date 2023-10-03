@@ -339,3 +339,229 @@ console.log(oneYetAgain.length); // 1
 ```
 stillOne 함수의 결과는 간단하다. 기본값이 없는 하나의 매개변수와 기본값이 있는 매개변수가 있으므로 그 인자 수는 1이다.
 oneYetAgain 함수의 결과는 c 매개변수에 명시적인 기본값이 없지만 앞에 있는 매개변수에 기본 값이 있기 때문에 인자수에 포함되지 않는다.
+# Class
+언어가 클래스를 가지려면 캡슐화(데이터와 메서드를 함께 묶음)와 상속, 이렇게 둘을 제공해야 한다.
+클래스를 갖는다는 것은 클래스 기반과 같지 않으며 언어가 캡슐화 및 상속화를 지원한다는 의미이다.
+```js
+class Color {
+  constructor(r = 0, g = 0, b = 0) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+  get rgb() {
+    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+  }
+
+  set rgb(value) {
+    // 추후..
+  }
+
+  toString() {
+    // toString을 재정의 (오버라이드함)
+    return this.rgb;
+  }
+
+  static fromCSS(css) {
+    // 추후..
+  }
+}
+
+let c = new Color(30, 144, 255);;
+console.log(String(c)); // 'rgb(30, 144, 255)'
+c = Color.fromCSS("00A");
+console.log(String(c)); // "rgb(0, 0, 170)"
+```
+위 코드는 다음과 같이 클래스를 정의한다.
+- 생성자
+- 세 가지 **데이터 속성**(r,g,b)
+- **접근자 속성**(r,g,b)
+- **프로토타입 메서드**(toString, 일반적으로 인스턴스를 통해 접근하기 때문에 **인스턴스 메서드** 라고도 하지만 ** 프로토타입 메서드**가 더 정확하다. 실제 **인스턴스 메서드**는 프로토타입에서 상속되지 않고 인스턴스에만 존재한다)
+- **정적 메서드**(fromCSS, 종종 **클래스 메서드**라고도 한다)
+
+부분별로 나누어서 만들어보면 다음과 같은 순서를 따른다.
+우선 가장 먼저 작성해야 할 것은 클래스 정의 자체다.
+```js
+// 클래스 정의
+class Color {}
+
+// 익명 클래스 정의
+let Color = class {}
+
+// 클래스 정의
+let C = class Color {};
+```
+클래스 선언은 함수 선언처럼 호이스팅 되지 않는다.
+대신 임시 데드존으로 완성된 let 및 const 선언과 같이 준호이스팅된다.
+초기화가 아닌 식별자만 호이스팅된다. let 및 const와 마찬가지로 전역 스코프에서 클래스를 선언하면 클래스의 식별자는 전역이지만 전역 객체의 속성이 아니다.
+
+### 생성자 추가
+생성자 정의에서 생성자에 대한 코드를 정의한다.
+```js
+class Color {
+  constructor(r=0, g=0, b=0) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+}
+```
+위 코드는 클래스의 식별자인 Color와 연관될 함수를 정의한다.
+생성자는 함수이지만 객체 생성 프로세스의 일부로만 호출할 수 있다.
+생성자 함수를 실행하려면 new를 사용한 결과 또는 Reflect.construct 호출의 결과여야 한다.
+객체를 생성하지 않을 때 호출하려고 하면 오류가 발생한다.
+클래스 내부의 코드는 클래스 외부의 코드가 엄격 모드가 아니더라도 항상 엄격 모드다.
+### 인스턴스 속성 추가
+클래스의 새 인스턴스 속성을 설정하는 표준 방법은 생성자에서 속성을 할당하는 것이다.
+```js
+class Color {
+  constructor(r=0, g=0, b=0) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+}
+```
+이러한 속성은 기본 할당을 통해 생성되기 때문에 구성, 쓰기, 열거가 가능하다.
+즉, 삭제가 가능하고 오버라이드가 가능하고 `for(key in this)`를 하면 key가 나온다.
+당연히 매개변수에서 가져온 속성에 추가하여 생성자 인수에서 가져오지 않는 속성을 설정할 수 있다.
+리터러러이나 다른 곳에서 가져온 값만 사용하면 된다. 예를들어 모든 Color 인스턴스가 검은색으로 시작되도록 하려면 r,g,b 매개변수를 생략하고 r,g,b 속성이 모두 0 값으로 시작하도록 할 수 있다.
+```js
+class Color {
+  constructor() {
+    this.r = 0;
+    this.g = 0;
+    this.b = 0;
+  }
+}
+```
+### 프로토타입 메서드 추가
+모든 인스턴스가 접근할 수 있도록 클래스의 프로토타입 객체에 배치할 메서드를 추가해보자
+```js
+class Color {
+  constructor(r = 0, g = 0, b = 0) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+  toString() {
+    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+  }
+}
+```
+```js
+const c = new Color(30, 144, 255);
+console.log(c.toString()); // "rgb(30, 144, 255)"
+```
+생성자 정의와 toString 정의 사이에는 쉼표가 없다. 객체 리터럴이 있는 경우와 마찬가지다.
+클래스 정의는 객체 리터럴과 다르다. 쉼표로 구분하지 않는다.
+### 정적 메서드 추가
+```js
+class Color {
+  // ...
+  static fromCSS(css) {
+    const match = /^#?([0-9a-f]{3}|[0-9a-f]{6});?$/i.exec(css);
+    if (!match) {
+      throw new Error("Invalid CSS color: " + css);
+    }
+    let vals = match[1];
+    if (vals.length === 3) {
+      vals = vals[0] + vals[0] + vals[1] + vals[1] + vals[2] + vals[2];
+    }
+    return new this(
+      parseInt(vals.substr(0, 2), 16),
+      parseInt(vals.substr(2, 2), 16),
+      parseInt(vals.substr(4, 2), 16)
+    );
+  }
+}
+```
+static 키워드는 자바스크립트 엔진이 Color.prototype이 아닌 Color 자체에 해당 메서드를 배치하도록 지시한다. **Color에서 직접 호출한다**.
+프로토타입 메서드와 마찬가지로 메서드 구문을 사용한다는 것은 fromCSS에 객체가 할당된 프로토타입 속성이 없다는 것을 의미한다.
+### static메서드와 instance메서드의 차이
+```js
+class Example {
+  static staticMethod() {
+    console.log('This is a static method');
+  }
+
+  instanceMethod() {
+    console.log('This is an instance method');
+  }
+}
+
+Example.staticMethod(); // 정상적으로 호출됨
+Example.instanceMethod(); // 에러: instanceMethod는 정의되지 않았습니다.
+const obj = new Example();
+obj.staticMethod(); // 에러: staticMethod는 정의되지 않았습니다.
+obj.instanceMethod(); // 정상적으로 호출됨
+```
+- 접근 가능성
+  - Static 메서드: 클래스 내부에서만 접근 가능하다. 즉, 인스턴스의 속성에는 접근할 수 없다.
+  - Instance 메서드: 클래스 내부 및 해당 클래스의 인스턴스에 모두 접근 가능하다.
+- 사용 사례
+  - Static 메서드: 객체의 상태와 무관한 동작이 필요할 때 유용하다. 예를들어, 유틸 함수를 만들거나 객체를 생성하는 팩토리 메서드를 정의할 때 사용할 수 있다.
+  - Instance 메서드: 주로 객체의 상태와 동작을 다룰 때 사용된다. 객체의 특정 인스턴스에 대해 작동하는 메서드를 정의한다.
+#### 계산기 예시
+```js
+class Calculator {
+  static add(a,b) {
+    return a+b;
+  }
+
+  subtract(a,b) {
+    return a - b;
+  }
+}
+
+Calculator.add(5,3); // 8
+const calc = new Calculator();
+calc.subtract(5,3); // 2
+```
+
+위의 예에서 **add**는 두 숫자를 더하는 동작으로, 객체의 상태에 의존하지 않는다.
+따라서 이 메서드는 static으로 정의된다.
+하지만 **subtract**는 객체의 상태를 변경하지 않고 두 숫자를 뺄셈하는 동작으로, 객체의 인스턴스에서 호출된다.
+
+요약하면, static메서드는 클래스의 전반적인 동작과 관련이 있고, 인스턴스 메서드는 객체의 상태와 특정한 인스턴스와 관련이 있다.
+### 접근자 속성 추가
+접근자 속성은 getter 메서드, setter 메서드, setter 메서드 또는 둘 다 모두가 있는 속성이다.
+Color의 경우 색상을 표준 rgb(r,g,b) 문자열로 가져오는 rgb속성을 제공하고 문자열 자체를 만드는 대신 해당 속성을 사용하도록 toString 메서드를 추가할 수 있다.
+```js
+class Color {
+  // ...
+  get rgb() {
+    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+  }
+
+  toString() {
+    return this.rgb;
+  }
+}
+let c = new Color(30, 144, 255);
+console.log(String(c)); // "rgb(30, 144, 255)"
+```
+지금까지 Color의 rgb 접근자는 읽기 전용이다(setter가 없는 getter).setter를 추가하려면 set메서드도 정의해야한다.
+```js
+class Color {
+  // ...
+  get rgb() {
+    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+  }
+
+  set rgb(value) {
+    let s = String(value);
+    let match = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/i.exec(
+      s.replace(/\s/g, "")
+    );
+    if (!match) {
+      throw new Error("Invalid RGB color: " + s);
+    }
+    this.r = parseInt(match[1], 10);
+    this.g = parseInt(match[2], 10);
+    this.b = parseInt(match[3], 10);
+  }
+}
+```
