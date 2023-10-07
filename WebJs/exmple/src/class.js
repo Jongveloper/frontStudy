@@ -47,3 +47,14 @@ let c = new Color(30, 144, 255);;
 console.log(String(c)); // 'rgb(30, 144, 255)'
 c = Color.fromCSS("00A");
 console.log(String(c)); // "rgb(0, 0, 170)"
+
+class ColorWithAlpha extends Color {
+  constructor(r=0, g=0, b=0, a=1) {
+    super(r, g, b);
+    this.a = a;
+  }
+}
+
+const col = new ColorWithAlpha(30, 144, 255);
+console.log(String(col)); // rgb(30,144,255);
+

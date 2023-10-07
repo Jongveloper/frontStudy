@@ -565,3 +565,82 @@ class Color {
   }
 }
 ```
+### 서브클래스
+새로운 문법은 기본 클래스에서도 유용하지만 실제로는 서브클래스와 함께 사용할 때 더욱 유용하다.
+```js
+class Color {
+  constructor(r = 0, g = 0, b = 0) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+  get rgb() {
+    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+  }
+
+  set rgb(value) {
+    let s = String(value);
+    let match = /^rgb\((\d{1,3}),(\d{1,3}),(\d{1,3})\)$/i.exec(
+      s.replace(/\s/g, "")
+    );
+    if (!match) {
+      throw new Error("Invalid RGB color: " + s);
+    }
+    this.r = parseInt(match[1], 10);
+    this.g = parseInt(match[2], 10);
+    this.b = parseInt(match[3], 10);
+  }
+
+  toString() {  
+    return "rgb(" + this.r + "," + this.g + "," + this.b + ")";
+  }
+
+  static fromCSS(css) {
+    const match = /^#?([0-9a-f]{3}|[0-9a-f]{6});?$/i.exec(css);
+    if (!match) {
+      throw new Error("Invalid CSS color: " + css);
+    }
+    let vals = match[1];
+    if (vals.length === 3) {
+      vals = vals[0] + vals[0] + vals[1] + vals[1] + vals[2] + vals[2];
+    }
+    return new this(
+      parseInt(vals.substr(0, 2), 16),
+      parseInt(vals.substr(2, 2), 16),
+      parseInt(vals.substr(4, 2), 16)
+    );
+  }
+}
+
+let c = new Color(30, 144, 255);;
+console.log(String(c)); // 'rgb(30, 144, 255)'
+c = Color.fromCSS("00A");
+console.log(String(c)); // "rgb(0, 0, 170)"
+
+class ColorWithAlpha extends Color {}
+
+const col = new ColorWithAlpha(30, 144, 255);
+console.log(String(col)); // rgb(30,144,255);
+```
+ColorWithAlpha는 Color의 서브클래스다.
+ColorWithAlpha는 명시적으로 정의된 생성자가 없더라도 이를 사용하여 색상을 구성해도 잘 작동한다.
+**자바스크립트 엔진이 기본 생성자를 제공했기 때문이다.**
+엔진이 기본 클래스에 대해 제공하는 아무것도 하지 않는 기본값 대신 서브클래스의 기본값은 슈퍼 클래스의 생성자를 호출하여 모든 인수를 전달한다.
+
+### super 키워드
+ColorWithAlpha에 기능을 추가하려면 많은 경우 새로운 키워드인 super에 대해 알아야한다.
+슈퍼클래스의 측면을 참조하기 위해 생성자와 메서드에서 super을 사용한다.
+- super() : 서브클래스 생성자에서 마치 객체를 생성하는 함수인 것 처럼 super를 호출하고 슈퍼클래스가 객체의 초기화를 수행하도록 한다.
+- super.property와 super.method(): super.property와 super.method()가 대신 super에서 접근하여 슈퍼클래스 프로타입의 속성 및 메서드를 참조한다.
+```js
+class ColorWithAlpha extends Color {
+  constructor(r=0, g=0, b=0, a=1) {
+    super(r, g, b);
+    this.a = a;
+  }
+}
+```
+ColorWithAlpha가 가장 먼저 하는 일은 super를 호출하고 r,g,b 매개변수를 전달하는 것이다.
+이렇게하면 객체가 생성되고 Color가 객체를 초기화할 수 있다.
+때때로 서브클래스 메서드는 구현의 일부로 슈퍼클래스 메서드를 호출해야 한다.
