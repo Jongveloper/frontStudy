@@ -671,3 +671,53 @@ console.log(obj); // {answer : 42}
 ```
 표현식은 각 속성 정의가 평가될 때(소스 코드 순서대로) 객체 리터럴 평가의 일부로 즉시 평가된다.
 따라서 표현식은 다른 표현식의 결과를 기반으로 할 수 있다.
+### 객체의 프로토타입 얻기와 설정하기
+생성자 함수를 통해 특정 프로터타입 객체로부터 상속받은 객체를 생성하는 것은 항상 가느앻ㅆ다.
+ES5는 Object.create를 통해 직접 수행하고 Object.getPrototypeOf를 통해 객체의 프로토타입을 가져오는 기능을 추가했다.
+ES2015에는 기존 객체의 프로토타입을 설정하는 기능이 추가되었다.
+### Object.setPrototypeOf
+이를 수행하는 기본 방법은 Object.setPrototypeOf를 통해 변경할 수 있으며 변경할 객체와 제공할 프로토타입을 받는다.
+```js
+const p1 = {
+  greet: function() {
+    console.log("p1 greet, name = " + this.name);
+  }
+};
+const p2 = {
+  greet: function() {
+    console.log("p2 greet, name = " + this.name);
+  }
+};
+
+const obj = Object.create(p1);
+obj.name = "Joe";
+obj.greet(); // "p1 greet, name = Joe"
+Object.setPrototypeOf(obj, p2);
+obj.greet(); // "p2 greet, name = Joe"
+```
+위 코드에서 obj는 프로토타입으로 p1을 사용하여 시작하므로 obj.greet()에 대한 첫 번 째 호출은
+p1의 인사를 사용하고 "p1 greet, name = Joe"를 출력한다. 그런 다음 코드는 코드는 p2를 사용하도록 obj의 프로토타입을 변경하므로 두 번째 greet 호출은 p2의 greet를 사용하고 "p2 greet, name = Joe"를 출력한다.
+객체를 만든 후 프로토타입을 변경하는 것은 드문 일이며 그렇게하면 객체를 최적화 해제하여 속성 조회가 훨씬 느려질 수 있다.
+### 브라우저에서 __proto__ 속성
+브라우저 환경에서 __proto__라는 접근자 속성을 사용하여 객체의 프로토타입을 가져오고 설정할 수 있지만 새 코드에서는 그렇게 하지 않는 것이 좋다.
+공식적으로 브라우저가 아닌 자바스크렙트 엔전에서는 정의되지 않았기 때문이다.
+```js
+const p1 = {
+  greet: function() {
+    console.log("p1 greet, name = " + this.name);
+  }
+};
+
+const p2 = {
+  greet: function() {
+    console.log("p2 greet, name = " + this.name);
+  }
+};
+const obj = Object.create(p1);
+obj.name = "Joe";
+obj.greet(); // "p1 greet, name = Joe"
+obj.__proto__ = p2;
+obj.greet(); // "p2 greet, name = Joe"
+```
+__proto__는 OBject.prototype에 의해 정의된 접근자 속성이므로 사용하는 객체는 Object.prototype에서 상속해야 사용할 수 있다.
+예를들어 Object.create(null)을 통해 생성된 객체에는 __proto_가 없으며 해당 객체를 프로토타입으로 사용하는 객체도 없다.
