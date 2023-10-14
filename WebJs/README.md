@@ -774,3 +774,60 @@ const obj = {
 obj["biz-baz"]() // "Ran biz-baz"
 obj.example() // "Ran example"
 ```
+### 심볼
+ES5까지 속성 이름(키)은 항상 문자열이었다.
+ES2015부터 속성 키는 문자열 또는 **심볼**이 될 수 있다.
+심볼은 고유한 기본값이다. **유일하다는 것**이 주요 목적과 특징이다.
+심볼은 객체 속성 외에도 사용할 수 있지만 일반적으로 사용하는 곳은 객체 속성이다.
+```js
+class Example1 {
+}
+class Example2 {
+  get [Symbol.toStringTag]() {
+    return "Example2";
+  }
+}
+console.log(new Example1().toString()); // "[object OBJECT]"
+console.log(new Example2().toString()); // "[object Example2]"
+```
+Symbol.toStringTag의 값은 Object.prototype.toString 메서드가 찾는 미리 정의된 잘 알려진 심볼이다.
+ES5에서 "[object Object]"를 반환했을 때 ES2015+에서는 Symbol.toStringTag 속성을 찾는다.
+속성의 값은 문자열이고toString은 결과 "[object XYZ]" 문자열의 XYZ부분에 해당하는 값을 사용한다.
+그렇지 않으면 예전대로 Object를 사용한다. 예에서 newExample1().toString()은 적절한 심볼 이름을 가진 객체에 속성이 없기 때문에
+"[object Object]"를 반환했다. 그런데 new Example2().toString() 호출은 속성이 존재하고값이 "Example2"이기 때문에 ["object Example2"]를 반환했다.
+### 심볼 생성 및 사용
+심볼 함수를 호출하면 새롭고 고유한 심볼을 얻을 수 있다.
+심볼은 기본 요소이므로 new를 사용하지 않는다.
+심볼이 있으면 생성 중에 계산된 속성 이름 표기법을 사용하거나 생성 후 대괄호 표기법을 사용하여 객체에 추가할 수 있다.
+```js
+const mySymbol = Symbol();
+const obj = {
+  [mySymbol]: 6 // 계산된 속성 이름
+};
+const anotherSymbol = Symbol();
+obj[anotherSymbol] = 42; // 대괄호 표기법
+console.log(obj[mySymbol]); // 6
+console.log(obj[anotherSymbol]); // 42
+```
+### 심볼은 정보 은닉을 위한 것이 아니다.
+```js
+const everUpward = (() => {
+  const count = Symbol("count");
+  return {
+    [count]: 0,
+    next() {
+      return ++this[count];
+    },
+    get() {
+      return this[count];
+    }
+  }
+})();
+
+console.log(evrUpward.get()); // 0
+everUpward.next();
+console.log(evrUpward.get()); // 1
+console.log(evrUpward[count]); // undefined
+console.log(everUpward[Symbol("count")]); // undefined
+```
+count에 저장된 심볼은 검색할 수 있기 때문에 심볼은 비공개가 아니다.
