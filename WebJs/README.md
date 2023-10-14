@@ -721,3 +721,56 @@ obj.greet(); // "p2 greet, name = Joe"
 ```
 __proto__는 OBject.prototype에 의해 정의된 접근자 속성이므로 사용하는 객체는 Object.prototype에서 상속해야 사용할 수 있다.
 예를들어 Object.create(null)을 통해 생성된 객체에는 __proto_가 없으며 해당 객체를 프로토타입으로 사용하는 객체도 없다.
+### 메서드 문법과 super 외부 클래스
+```js
+var obj1= {
+  name: "Joe",
+  say: function() {
+    console.log(this.name);
+  }
+};
+obj1.say() // "Joe"
+```
+```js
+const obj2 = {
+  name: "Joe",
+  say() {
+    console.log(this.name);
+  }
+};
+obj2.say();
+```
+클래스에서처럼 메스드 구문은 기존 함수로 초기화된 속성보다 더 많거나 적은 작업을 수행한다.
+메서드에서 객체로 다시 연결하는 목적은 메서드 내에서 super 사용을 지원하는 것이다.
+예를들어 toString 함수가 프로토타입의 toString을 사용했지만 모두 대문자로 만든 객체를 만들고 싶다고 가정했을때, ES5에서는 다음과 같이 프로토타입의 함수를 명시적으로 호출해야 했다.
+```js
+var obj = {
+  toString: function() {
+    return Object.prototype.toString.call(this).toUpperCase();
+  }
+};
+console.log(obj.toString()); // '[object OBJECT]'
+ES2015+에서는 메서드 구문과 super를 사용할 수 있따.
+```
+```js
+const obj = {
+  toString() {
+    return super.toString().toUpperCase();
+  }
+};
+console.log(obj.toString()); // '[OBJECT OBJECT]'
+```
+메서드 이름은 리터럴 식별자일 필요는 없다. 속성 키와 마찬가지로 문자열 또는 계산된 이름일 수 있다.
+```js
+const s = "ple";
+const obj = {
+  "biz-baz"() {
+    console.log("Ran biz-baz");
+  },
+  ["exam" + s]() {
+    console.log("Ran example");
+  }
+};
+obj["biz-baz"]() // "Ran biz-baz"
+obj.example() // "Ran example"
+```
