@@ -1,6 +1,7 @@
 export const ROUTE = {
   HOME: '/',
   COMPONENT: '/component',
+  ABOUT: '/about',
 }
 
 export const ROUTES = [
@@ -13,5 +14,10 @@ export const ROUTES = [
     key: 'component',
     path: ROUTE.COMPONENT,
     component: 'Component',
+  },
+  {
+    key: 'about',
+    path: ROUTE.ABOUT,
+    component: 'About',
   },
 ]
